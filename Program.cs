@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,23 +14,25 @@ namespace Ahorcado
             Console.CursorVisible = false;
             Console.SetWindowSize(100, 30);
 
-            //Logo();
+            string jugador1, jugador2;
+            int jugador1Puntos = 0, jugador2Puntos = 0;
+            int longitud = 3;
 
-            //Animacion();
+            Logo();
+
+            Animacion();
 
             Console.Clear();
             Console.WriteLine("╔═ Jugador 1 ══════════════╗");
-            string jugador1, jugador2;
             Console.Write(" Nombre: ");
             jugador1 = Console.ReadLine();
-            Console.WriteLine();
-            Console.WriteLine("╔═ Jugador 2 ══════════╗");
+            Console.WriteLine("\n╔═ Jugador 2 ══════════╗");
             Console.Write(" Nombre: ");
             jugador2 = Console.ReadLine();
-            int jugador1Puntos = 0, jugador2Puntos = 0;
+                        
             Console.Clear();
-            int longitud = 3;
-            musica();
+           
+            Musica();
 
             do
             {
@@ -47,58 +49,10 @@ namespace Ahorcado
 
             } while (longitud < 11);
 
-            Console.SetCursorPosition(10, 0);
-            Console.WriteLine("..######......###....##....##....###....########...#######..########.");
-            Console.SetCursorPosition(10, 1);
-            Console.WriteLine(".##....##....##.##...###...##...##.##...##.....##.##.....##.##.....##");
-            Console.SetCursorPosition(10, 2);
-            Console.WriteLine(".##.........##...##..####..##..##...##..##.....##.##.....##.##.....##");
-            Console.SetCursorPosition(10, 3);
-            Console.WriteLine(".##...####.##.....##.##.##.##.##.....##.##.....##.##.....##.########.");
-            Console.SetCursorPosition(10, 4);
-            Console.WriteLine(".##....##..#########.##..####.#########.##.....##.##.....##.##...##..");
-            Console.SetCursorPosition(10, 5);
-            Console.WriteLine(".##....##..##.....##.##...###.##.....##.##.....##.##.....##.##....##.");
-            Console.SetCursorPosition(10, 6);
-            Console.WriteLine("..######...##.....##.##....##.##.....##.########...#######..##.....##");
-            Console.WriteLine();
-            Console.SetCursorPosition(15, 8);
-            Console.WriteLine("                            \\|||/");
-            Console.SetCursorPosition(15, 9);
-            Console.WriteLine("                            (o o)");
-            Console.SetCursorPosition(15, 10);
-            Console.WriteLine("                 ------ooO - (_) - Ooo------");
-            Console.SetCursorPosition(15, 11);
-            if(jugador1Puntos > jugador2Puntos)
-            { 
-                Console.WriteLine($"                            {jugador1}");
-                Console.SetCursorPosition(15, 12);
-                Console.WriteLine($"                         con {jugador1Puntos} pts");
-            }
-            else
-            {
-                Console.WriteLine($"                            {jugador2}");
-                Console.SetCursorPosition(15, 12);
-                Console.WriteLine($"                         con {jugador2Puntos} pts");
-            }
-                
+
+            Ganador(jugador1, jugador2, jugador1Puntos, jugador2Puntos);
 
             Console.ReadLine();
-
-            
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         }
 
@@ -173,7 +127,6 @@ namespace Ahorcado
                 palabra = Console.ReadLine();
             } while (palabra.Length != longitud || palabra == null);
 
-            
 
             int abc = 0;
             int letrasDichas = 0;
@@ -182,6 +135,9 @@ namespace Ahorcado
             char[] letrasOcultas = new char[palabra.Length];
             char[] elegidas = new char[27];
 
+            int vidas = 4;
+            bool descubierta = true;
+
             for (int x = 0; x < letras.Length; x++)
             {
                 letras[x] = palabra[x];
@@ -189,8 +145,6 @@ namespace Ahorcado
 
             }
 
-            int vidas = 4;
-            bool descubierta = true;
 
             do
             {
@@ -201,14 +155,13 @@ namespace Ahorcado
                 Console.Write("\n\n\nLetras Elegidas: ");
                 for (int x = 0; x < elegidas.Length && elegidas[x] != '\0'; x++)
                 {
-
                     Console.Write($"{elegidas[x]} ");
                     
-
                 }
                 Console.BackgroundColor = ConsoleColor.Black;
                 Console.SetCursorPosition(0, 5);
-                Ahorcado(vidas);
+
+                Ahorcado(vidas); // dibujo del ahorcado
 
                 Console.SetCursorPosition(20, 7);
                 Console.Write("Palabra: ");
@@ -217,7 +170,7 @@ namespace Ahorcado
                 Creditos();
 
                 
-                int seg = 5;
+                int seg = 20; // tiempoen segundos para elegir letras
                 int cronometro;
                 ConsoleKey eleccion = ConsoleKey.D1;
                 
@@ -234,6 +187,7 @@ namespace Ahorcado
                     {
                         truco = false;
                         cronometro = Tiempo(seg);
+
                         if (cronometro <= 0)
                         {
                             vidas--;
@@ -244,7 +198,8 @@ namespace Ahorcado
 
                             Console.SetCursorPosition(27, 9);
                             eleccion = Console.ReadKey().Key;
-                                if (eleccion == ConsoleKey.Escape)
+
+                                if (eleccion == ConsoleKey.Escape) /// para hacer un "truco"
                                 {
                                     seg = cronometro;
                                     Truco();
@@ -265,6 +220,7 @@ namespace Ahorcado
                 if (cronometro != 0)
                 { 
                     bool repetida = false;
+
                     for (int x = 0; x < elegidas.Length && repetida == false; x++)
                     {
                         if (Convert.ToChar(eleccion) == char.ToUpper(elegidas[x]))
@@ -381,7 +337,7 @@ namespace Ahorcado
             }
         }
 
-        public static void musica()
+        public static void Musica()
         {
             System.Media.SoundPlayer player = new System.Media.SoundPlayer("D:\\Codigos Fuentes\\Repositorio\\Ahorcado\\Properties\\musica.wav"); player.PlayLooping();
 
@@ -482,8 +438,43 @@ namespace Ahorcado
 
         } 
 
+        public static void Ganador(string jugador1, string jugador2, int jugador1Puntos, int jugador2Puntos)
+        {
+            Console.SetCursorPosition(10, 0);
+            Console.WriteLine("..######......###....##....##....###....########...#######..########.");
+            Console.SetCursorPosition(10, 1);
+            Console.WriteLine(".##....##....##.##...###...##...##.##...##.....##.##.....##.##.....##");
+            Console.SetCursorPosition(10, 2);
+            Console.WriteLine(".##.........##...##..####..##..##...##..##.....##.##.....##.##.....##");
+            Console.SetCursorPosition(10, 3);
+            Console.WriteLine(".##...####.##.....##.##.##.##.##.....##.##.....##.##.....##.########.");
+            Console.SetCursorPosition(10, 4);
+            Console.WriteLine(".##....##..#########.##..####.#########.##.....##.##.....##.##...##..");
+            Console.SetCursorPosition(10, 5);
+            Console.WriteLine(".##....##..##.....##.##...###.##.....##.##.....##.##.....##.##....##.");
+            Console.SetCursorPosition(10, 6);
+            Console.WriteLine("..######...##.....##.##....##.##.....##.########...#######..##.....##");
+            Console.WriteLine();
+            Console.SetCursorPosition(15, 8);
+            Console.WriteLine("                            \\|||/");
+            Console.SetCursorPosition(15, 9);
+            Console.WriteLine("                            (o o)");
+            Console.SetCursorPosition(15, 10);
+            Console.WriteLine("                 ------ooO - (_) - Ooo------");
+            Console.SetCursorPosition(15, 11);
+            if (jugador1Puntos > jugador2Puntos)
+            {
+                Console.WriteLine($"                            {jugador1}");
+                Console.SetCursorPosition(15, 12);
+                Console.WriteLine($"                         con {jugador1Puntos} pts");
+            }
+            else
+            {
+                Console.WriteLine($"                            {jugador2}");
+                Console.SetCursorPosition(15, 12);
+                Console.WriteLine($"                         con {jugador2Puntos} pts");
+            }
+        }
 
     }
 }       
-    
-
